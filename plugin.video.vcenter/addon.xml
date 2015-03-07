@@ -10,7 +10,7 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="en">VCenter skin by michael34435</summary>
     <description lang="en">This is only for VCenter plugin.</description>
-    <disclaimer lang="en">This is only for VCenter plugin.</disclaimer>
+    <disclaimer lang="en">This addon is contributed by michael34435, all rights reserved to CapsLock, Studio.</disclaimer>
     <platform>all</platform>
     <website>https://github.com/CapsLock-Studio</website>
     <email>michael34435@gmail.com</email>
