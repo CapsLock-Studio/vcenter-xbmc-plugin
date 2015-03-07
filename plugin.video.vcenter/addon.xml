@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<addon
+ id="plugin.video.vcenter"
+ version="0.1"
+ name="VCenter"
+ provider-name="michael34435@CapsLock, Studio">
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">VCenter skin by michael34435</summary>
+    <description lang="en">This is only for VCenter plugin.</description>
+    <disclaimer lang="en">This is only for VCenter plugin.</disclaimer>
+    <platform>all</platform>
+    <website>https://github.com/CapsLock-Studio</website>
+    <email>michael34435@gmail.com</email>
+    <source>https://github.com/CapsLock-Studio/vcenter-xbmc-plugin</source>
+  </extension>
+</addon>
