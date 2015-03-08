@@ -44,10 +44,9 @@ def href_get_id(url):
     full_sliced_url = url.split('?')
     for full_sliced in full_sliced_url:
         sliced = full_sliced.split('/')
-        for s in sliced:
-            m = re.match('^([a-f0-9A-F]+)$', s)
-            if m:
-                return m.group(1)
+        m = re.match('^([a-f0-9A-F]+)$', sliced[-1])
+        if m:
+            return m.group(1)
     return ''
 
 def get_folder_data(folder=''):
