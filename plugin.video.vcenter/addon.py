@@ -32,7 +32,7 @@ __token__ = '735034694f57413275406b524d5638763440615068445769596e566173367256775
 __code__ = '6d4b6e697a695953305168556b4f6b46624379486d412d2d'
 __addon__ = xbmcaddon.Addon(__id__)
 __special__ = __addon__.getSetting('special')
-__special__ = True if __special__ is 'true' else False
+__special__ = True if __special__ == 'true' else False
 
 def build_url(query):
     return '%s?%s' % (__base__, urllib.urlencode(query))
@@ -71,18 +71,16 @@ def build():
     __data__ = get_folder_data('' if __folder__ is None else __folder__)
 
     for data in __data__:
+        li = xbmcgui.ListItem(data.get('name'), iconImage='')
+        li.setProperty('fanart_image', __addon__.getAddonInfo('fanart'))
         #  is folder
         if data.get('isFolder'):
             url = build_url({'folder': data.get('id')})
-            li = xbmcgui.ListItem(data.get('name'), iconImage='')
-            li.setProperty('fanart_image', __addon__.getAddonInfo('fanart'))
             xbmcplugin.addDirectoryItem(handle=__handle__, url=url, listitem=li, isFolder=True)
         # is video
         else:
             url = '%s/%s' % (__video_url__, data.get('id'))
             url = build_vcenter_url(url, 'funcs/stream')
-            li = xbmcgui.ListItem(data.get('name'), iconImage='')
-            li.setProperty('fanart_image', __addon__.getAddonInfo('fanart'))
             xbmcplugin.addDirectoryItem(handle=__handle__, url=url, listitem=li)
 
     xbmcplugin.endOfDirectory(__handle__)
