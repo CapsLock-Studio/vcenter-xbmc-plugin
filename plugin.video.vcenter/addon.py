@@ -49,7 +49,7 @@ def href_get_id(url):
             return m.group(1)
     return ''
 
-def get_folder_data(folder=''):
+def build_folder_data(folder=''):
     url = '%s/%s' % (__folder_url__, folder)
     url = build_vcenter_url(url)
     res = requests.get(url)
@@ -65,24 +65,50 @@ def get_folder_data(folder=''):
     return result
 
 def build():
-    __folder__ = __args__.get('folder', '')
-    __folder__ = __folder__[0] if type(__folder__) is list else __folder__
-    __data__ = get_folder_data('' if __folder__ is None else __folder__)
-
-    for data in __data__:
-        li = xbmcgui.ListItem(data.get('name'), iconImage='')
-        li.setProperty('fanart_image', __addon__.getAddonInfo('fanart'))
-        #  is folder
-        if data.get('isFolder'):
-            url = build_url({'folder': data.get('id')})
-            xbmcplugin.addDirectoryItem(handle=__handle__, url=url, listitem=li, isFolder=True)
-        # is video
-        else:
-            url = '%s/%s' % (__video_url__, data.get('id'))
-            url = build_vcenter_url(url, 'funcs/stream')
-            xbmcplugin.addDirectoryItem(handle=__handle__, url=url, listitem=li)
+    mode = __args__.get('mode', '')
+    mode = mode[0] if type(mode) is list else mode
+    if mode == 'main':
+        folder = __args__.get('folder', '')
+        folder = folder[0] if type(folder) is list else folder
+        all_data = build_folder_data('' if folder is None else folder)
+        build_data(all_data)
+    elif mode == 'top':
+        # change __folder_url__ with technical method
+        top_base_url = 'recent/top'
+        global __folder_url__
+        __folder_url__ = '%s/%s' % (__url_base__, top_base_url)
+        all_data = build_folder_data()
+        build_data(all_data)
+    else:
+        build_folder_item(name='VCenter', param={'mode': 'main'})
+        build_folder_item(name='Top Rated', param={'mode': 'top'})
 
     xbmcplugin.endOfDirectory(__handle__)
+
+def build_data(all_data):
+    for data in all_data:
+        #  is folder
+        if data.get('isFolder'):
+            build_folder_item(name=data.get('name'), param={'folder': data.get('id'), 'mode': 'main'})
+        # is video
+        else:
+            build_file_item(name=data.get('name'), id=data.get('id'), ref='funcs/stream')
+
+def build_list_item(name):
+    li = xbmcgui.ListItem(name, iconImage='')
+    li.setProperty('fanart_image', __addon__.getAddonInfo('fanart'))
+    return li
+
+def build_folder_item(name, param):
+    li = build_list_item(name)
+    url = build_url(param)
+    xbmcplugin.addDirectoryItem(handle=__handle__, url=url, listitem=li, isFolder=True)
+
+def build_file_item(name, id, ref):
+    li = build_list_item(name)
+    url = '%s/%s' % (__video_url__, id)
+    url = build_vcenter_url(url, ref)
+    xbmcplugin.addDirectoryItem(handle=__handle__, url=url, listitem=li)
 
 if __name__ == '__main__':
     build()
